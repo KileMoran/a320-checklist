@@ -1,0 +1,265 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="color-scheme" content="dark"><title>A320neo 飞行检查清单 · iPad 版</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color-scheme:dark;background:#071725;color:#eff7ff}*{box-sizing:border-box}body{margin:0;background:#071725;color:#eff7ff;line-height:1.6}.hero{background:linear-gradient(125deg,#1e425f,#0c2236);padding:32px max(22px,env(safe-area-inset-left)) 29px}.container{max-width:980px;margin:0 auto;padding:20px 18px 65px}.hero-in{max-width:980px;margin:0 auto}.eyebrow{font-size:12px;letter-spacing:2.8px;color:#7ad7d2;font-weight:bold}.hero h1{font-size:clamp(26px,4.3vw,43px);margin:10px 0}.hero p{margin:6px 0;color:#b0c9db}.panel,.phase{background:#10283c;border:1px solid #31506a;border-radius:16px;margin-bottom:16px;overflow:hidden}.panel{padding:19px}.count-row{display:flex;justify-content:space-between;align-items:center;gap:14px}.count-row b{font-size:22px}.bar{background:#29465c;height:10px;border-radius:20px;margin:16px 0;overflow:hidden}.fill{background:#30bea9;width:0;height:100%;transition:width .15s}.controls{display:flex;flex-wrap:wrap;gap:8px}button{font:inherit;color:#f1f8ff;background:#23455e;border:1px solid #426783;padding:10px 14px;border-radius:10px;cursor:pointer}button.primary{background:#137e82;border-color:#34adb0}button:active{filter:brightness(1.2)}.muted{font-size:13px;color:#a4c0d4}.search{width:100%;background:#0d2133;border:1px solid #31506a;color:white;padding:15px;border-radius:12px;font-size:16px;margin:0 0 18px}.phase summary{cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:17px 19px;gap:14px;font-weight:700;font-size:18px;list-style:none}.phase summary::-webkit-details-marker{display:none}.phase summary:before{content:'▾';color:#52cac1}.phase:not([open]) summary:before{content:'▸'}.phase-stat{font-weight:400;font-size:13px;color:#b0c9db;white-space:nowrap}.tasks{border-top:1px solid #2c455a}.task{display:flex;align-items:flex-start;gap:14px;padding:12px 18px;border-bottom:1px solid #203e54;cursor:pointer;min-height:50px}.task:last-child{border-bottom:0}.task:has(input:checked){background:#143e44}.task input{appearance:auto;accent-color:#37c2af;flex:none;margin:5px 0 0;width:23px;height:23px}.task-text{flex:1;font-size:16px;overflow-wrap:anywhere}.task-text em{display:inline-block;min-width:35px;color:#7ea4be;font-style:normal;font-size:13px}.task input:checked+.task-text{color:#8fb2b4;text-decoration:line-through}.notice{font-size:13px;color:#b7c9d7;padding:14px 16px;border-left:3px solid #35aaa7;background:#10293b;border-radius:5px}.hidden{display:none!important}@media (min-width:900px){.hero{padding-top:39px;padding-bottom:39px}.task{padding-top:14px;padding-bottom:14px}}@media print{*{color:#111!important;background:#fff!important}.controls,.search{display:none!important}.phase{break-inside:avoid}.task input{accent-color:black}}
+ .safety-banner{padding:16px 18px;border:1px solid #eab85d;background:#3c3329;border-radius:14px;margin-bottom:18px;color:#fff0c9}.safety-banner strong{display:block;font-size:17px;margin-bottom:6px}.safety-banner p{margin:7px 0;font-size:14px}.safety-banner .action{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.safety-banner .action button{background:#a66e17;border-color:#eab85d;color:#fff;font-weight:700}.save-time{font-size:13px;color:#9de3d7;margin-top:9px} .autosave-banner{padding:14px 18px;background:#113c40;border:1px solid #2b9a8d;border-radius:14px;margin-bottom:18px}.autosave-banner strong{color:#9cf0dd}.autosave-banner p{margin:6px 0;font-size:14px;color:#d9ecea}.autosave-banner.error{background:#452b2b;border-color:#e6a0a0}.autosave-banner.error strong{color:#ffb8b8} </style></head><body><header class="hero"><div class="hero-in"><div class="eyebrow">FLIGHT SIMULATOR · OFFLINE CHECKLIST</div><h1>A320neo 飞行检查清单</h1><p>冷舱启动 → 后推 → 起飞 → 爬升 → 下降 → 进近 → 着陆 → 停机</p><p>iPad 触屏适配 · 共 16 个阶段、215 项 · 无网络也能显示完整清单</p></div></header><main class="container"><section class="autosave-banner" aria-label="自动保存状态"><strong>● 自动保存已启用</strong><p>每勾选或取消一项，进度立即保存在此浏览器；再次访问同一个网址会自动恢复。无需点击保存按钮。</p><div class="save-time" id="save-time">正在检查保存功能…</div></section><div class="panel"><div class="count-row"><strong>总进度</strong><b id="count">0 / 215</b></div><div class="bar"><div class="fill" id="fill"></div></div><p class="muted" id="storage-status">所有检查项已经直接写进网页，无需运行脚本即可显示。</p><div class="controls"><button class="primary" type="button" id="expand">展开全部</button><button type="button" id="collapse">折叠全部</button><button type="button" id="backup">导出备用备份（可选）</button><button type="button" id="restore">导入旧进度（可选）</button><button type="button" id="reset">清空勾选</button></div><input type="file" id="backup-file" accept=".json,application/json" hidden></div><input id="search" class="search" placeholder="搜索步骤，例如 APU、MCDU、TCAS、襟翼…" aria-label="搜索步骤" type="search"><div id="phases"><details class="phase" open><summary><span>01 · 冷舱安全检查与通电</span><small class="phase-stat">0 / 30</small></summary><div class="tasks">
+<label class="task"><input type="checkbox" data-key="0-0"><span class="task-text"><em>01</em>前往 SimBrief 创建飞行计划</span></label>
+<label class="task"><input type="checkbox" data-key="0-1"><span class="task-text"><em>02</em>确认发动机开关关闭</span></label>
+<label class="task"><input type="checkbox" data-key="0-2"><span class="task-text"><em>03</em>确认发动机模式旋钮位于 NORM</span></label>
+<label class="task"><input type="checkbox" data-key="0-3"><span class="task-text"><em>04</em>确认天气雷达关闭</span></label>
+<label class="task"><input type="checkbox" data-key="0-4"><span class="task-text"><em>05</em>确认风切变预警关闭</span></label>
+<label class="task"><input type="checkbox" data-key="0-5"><span class="task-text"><em>06</em>确认起落架放下</span></label>
+<label class="task"><input type="checkbox" data-key="0-6"><span class="task-text"><em>07</em>确认雨刷关闭</span></label>
+<label class="task"><input type="checkbox" data-key="0-7"><span class="task-text"><em>08</em>确认电压在 25.5V 以上</span></label>
+<label class="task"><input type="checkbox" data-key="0-8"><span class="task-text"><em>09</em>打开 BAT 1 和 BAT 2 两个电瓶</span></label>
+<label class="task"><input type="checkbox" data-key="0-9"><span class="task-text"><em>10</em>地面电源可用时接通地面电源</span></label>
+<label class="task"><input type="checkbox" data-key="0-10"><span class="task-text"><em>11</em>等待自检，听到三声提示音</span></label>
+<label class="task"><input type="checkbox" data-key="0-11"><span class="task-text"><em>12</em>来到驾驶舱顶板</span></label>
+<label class="task"><input type="checkbox" data-key="0-12"><span class="task-text"><em>13</em>按教程将 ADR 1、2、3 导航相关开关依次置于 NAV</span></label>
+<label class="task"><input type="checkbox" data-key="0-13"><span class="task-text"><em>14</em>按需要设置 DOME 驾驶舱灯</span></label>
+<label class="task"><input type="checkbox" data-key="0-14"><span class="task-text"><em>15</em>按需要调节底部灯及显示灯光</span></label>
+<label class="task"><input type="checkbox" data-key="0-16"><span class="task-text"><em>17</em>执行 APU FIRE TEST</span></label>
+<label class="task"><input type="checkbox" data-key="0-17"><span class="task-text"><em>18</em>打开 APU MASTER SW</span></label>
+<label class="task"><input type="checkbox" data-key="0-18"><span class="task-text"><em>19</em>等待约 3 秒</span></label>
+<label class="task"><input type="checkbox" data-key="0-19"><span class="task-text"><em>20</em>按下 APU START</span></label>
+<label class="task"><input type="checkbox" data-key="0-20"><span class="task-text"><em>21</em>在 EFB 导入 SimBrief 数据</span></label>
+<label class="task"><input type="checkbox" data-key="0-21"><span class="task-text"><em>22</em>检查起飞机场、目的地和航班号</span></label>
+<label class="task"><input type="checkbox" data-key="0-22"><span class="task-text"><em>23</em>进入 EFB 地面页面 → Fuel</span></label>
+<label class="task"><input type="checkbox" data-key="0-23"><span class="task-text"><em>24</em>导入 SimBrief 燃油数据并开始加油</span></label>
+<label class="task"><input type="checkbox" data-key="0-24"><span class="task-text"><em>25</em>进入 EFB Payload 页面</span></label>
+<label class="task"><input type="checkbox" data-key="0-25"><span class="task-text"><em>26</em>导入 SimBrief 配载数据</span></label>
+<label class="task"><input type="checkbox" data-key="0-26"><span class="task-text"><em>27</em>点击左右箭头开始配载</span></label>
+<label class="task"><input type="checkbox" data-key="0-27"><span class="task-text"><em>28</em>确认配载完成</span></label>
+<label class="task"><input type="checkbox" data-key="0-28"><span class="task-text"><em>29</em>等待 APU 显示绿色 AVAIL</span></label>
+<label class="task"><input type="checkbox" data-key="0-29"><span class="task-text"><em>30</em>开启 APU BLEED 引气</span></label>
+</div></details>
+<details class="phase" open><summary><span>02 · 顶板和驾驶舱准备</span><small class="phase-stat">0 / 30</small></summary><div class="tasks">
+<label class="task"><input type="checkbox" data-key="1-0"><span class="task-text"><em>01</em>按顶板从下到上、从左到右的顺序检查</span></label>
+<label class="task"><input type="checkbox" data-key="1-1"><span class="task-text"><em>02</em>打开 CREW SUPPLY 机组供氧</span></label>
+<label class="task"><input type="checkbox" data-key="1-2"><span class="task-text"><em>03</em>打开 GND CTL</span></label>
+<label class="task"><input type="checkbox" data-key="1-3"><span class="task-text"><em>04</em>执行 CVR TEST</span></label>
+<label class="task"><input type="checkbox" data-key="1-4"><span class="task-text"><em>05</em>检查 ADRS 相关开关（按教程所述位置）</span></label>
+<label class="task"><input type="checkbox" data-key="1-5"><span class="task-text"><em>06</em>将 NAV 灯设为 1 档</span></label>
+<label class="task"><input type="checkbox" data-key="1-6"><span class="task-text"><em>07</em>将 STROBE 设为 AUTO</span></label>
+<label class="task"><input type="checkbox" data-key="1-7"><span class="task-text"><em>08</em>确认加油完成后打开安全带指示灯</span></label>
+<label class="task"><input type="checkbox" data-key="1-8"><span class="task-text"><em>09</em>将禁止吸烟指示灯设为 AUTO</span></label>
+<label class="task"><input type="checkbox" data-key="1-9"><span class="task-text"><em>10</em>将应急出口灯设为 ARM</span></label>
+<label class="task"><input type="checkbox" data-key="1-10"><span class="task-text"><em>11</em>检查上方无异常白灯</span></label>
+<label class="task"><input type="checkbox" data-key="1-11"><span class="task-text"><em>12</em>检查空调面板旋钮位于 12 点钟方向</span></label>
+<label class="task"><input type="checkbox" data-key="1-12"><span class="task-text"><em>13</em>检查空调面板无异常白灯</span></label>
+<label class="task"><input type="checkbox" data-key="1-13"><span class="task-text"><em>14</em>检查电瓶面板无异常白灯</span></label>
+<label class="task"><input type="checkbox" data-key="1-15"><span class="task-text"><em>16</em>执行发动机火警测试</span></label>
+<label class="task"><input type="checkbox" data-key="1-16"><span class="task-text"><em>17</em>检查右侧顶板无异常白灯</span></label>
+<label class="task"><input type="checkbox" data-key="1-17"><span class="task-text"><em>18</em>通过 EFB 天气页面读取当地 QNH</span></label>
+<label class="task"><input type="checkbox" data-key="1-18"><span class="task-text"><em>19</em>在小显示屏设置当地修正海压</span></label>
+<label class="task"><input type="checkbox" data-key="1-19"><span class="task-text"><em>20</em>将教程所述中间靠右开关扳至上方</span></label>
+<label class="task"><input type="checkbox" data-key="1-20"><span class="task-text"><em>21</em>按需求设置 ATC 面板</span></label>
+<label class="task"><input type="checkbox" data-key="1-21"><span class="task-text"><em>22</em>检查天气面板相关设备关闭状态</span></label>
+<label class="task"><input type="checkbox" data-key="1-22"><span class="task-text"><em>23</em>确认扰流板未预位、收回</span></label>
+<label class="task"><input type="checkbox" data-key="1-23"><span class="task-text"><em>24</em>确认襟翼位于 0</span></label>
+<label class="task"><input type="checkbox" data-key="1-24"><span class="task-text"><em>25</em>将 TCAS 面板第一个旋钮设为 AUTO</span></label>
+<label class="task"><input type="checkbox" data-key="1-25"><span class="task-text"><em>26</em>将第二个旋钮设为 1（机长）或 2（副机长）</span></label>
+<label class="task"><input type="checkbox" data-key="1-26"><span class="task-text"><em>27</em>将第三个旋钮设为 ON</span></label>
+<label class="task"><input type="checkbox" data-key="1-27"><span class="task-text"><em>28</em>将右侧小旋钮设为 ABV、STBY</span></label>
+<label class="task"><input type="checkbox" data-key="1-28"><span class="task-text"><em>29</em>检查应答机代码（教程写默认 7000、不跟随空管 2000）</span></label>
+<label class="task"><input type="checkbox" data-key="1-29"><span class="task-text"><em>30</em>按需设置副驾驶 ATC 面板</span></label>
+</div></details>
+<details class="phase" open><summary><span>03 · MCDU 航路及性能</span><small class="phase-stat">0 / 27</small></summary><div class="tasks">
+<label class="task"><input type="checkbox" data-key="2-0"><span class="task-text"><em>01</em>进入 FMGC，确认基本信息正确</span></label>
+<label class="task"><input type="checkbox" data-key="2-1"><span class="task-text"><em>02</em>进入 INIT 页面</span></label>
+<label class="task"><input type="checkbox" data-key="2-2"><span class="task-text"><em>03</em>按 INIT REQUEST 导入 SimBrief 计划</span></label>
+<label class="task"><input type="checkbox" data-key="2-3"><span class="task-text"><em>04</em>如出现 AOC ACT F-PLN UPLINK，按教程用 CLR 处理</span></label>
+<label class="task"><input type="checkbox" data-key="2-4"><span class="task-text"><em>05</em>检查 GND TEMP 地面温度</span></label>
+<label class="task"><input type="checkbox" data-key="2-5"><span class="task-text"><em>06</em>进入 F-PLN 页面</span></label>
+<label class="task"><input type="checkbox" data-key="2-6"><span class="task-text"><em>07</em>选择起飞机场 → DEPARTURE</span></label>
+<label class="task"><input type="checkbox" data-key="2-7"><span class="task-text"><em>08</em>根据 EFB 选择起飞跑道</span></label>
+<label class="task"><input type="checkbox" data-key="2-8"><span class="task-text"><em>09</em>选择离场程序 SID</span></label>
+<label class="task"><input type="checkbox" data-key="2-9"><span class="task-text"><em>10</em>选择目的地机场 → ARRIVAL</span></label>
+<label class="task"><input type="checkbox" data-key="2-10"><span class="task-text"><em>11</em>根据 EFB 选择落地跑道</span></label>
+<label class="task"><input type="checkbox" data-key="2-11"><span class="task-text"><em>12</em>选择进场程序 STAR</span></label>
+<label class="task"><input type="checkbox" data-key="2-12"><span class="task-text"><em>13</em>调整 ND 地图范围并开启 CSTR</span></label>
+<label class="task"><input type="checkbox" data-key="2-13"><span class="task-text"><em>14</em>在地图上检查航路</span></label>
+<label class="task"><input type="checkbox" data-key="2-14"><span class="task-text"><em>15</em>用 MCDU 箭头逐段检查航路</span></label>
+<label class="task"><input type="checkbox" data-key="2-15"><span class="task-text"><em>16</em>返回 INIT，按向左箭头进入 B 页面</span></label>
+<label class="task"><input type="checkbox" data-key="2-16"><span class="task-text"><em>17</em>从 EFB Payload 读取 ZFW / ZFWCG</span></label>
+<label class="task"><input type="checkbox" data-key="2-17"><span class="task-text"><em>18</em>以一位小数录入 ZFW / ZFWCG</span></label>
+<label class="task"><input type="checkbox" data-key="2-18"><span class="task-text"><em>19</em>从 EFB Fuel 读取轮挡燃油 Block Fuel</span></label>
+<label class="task"><input type="checkbox" data-key="2-19"><span class="task-text"><em>20</em>以吨为单位保留一位小数录入燃油</span></label>
+<label class="task"><input type="checkbox" data-key="2-20"><span class="task-text"><em>21</em>等待 MCDU 计算燃油和飞行时间</span></label>
+<label class="task"><input type="checkbox" data-key="2-21"><span class="task-text"><em>22</em>进入 PERF 页面</span></label>
+<label class="task"><input type="checkbox" data-key="2-22"><span class="task-text"><em>23</em>打开 EFB 起飞性能计算器</span></label>
+<label class="task"><input type="checkbox" data-key="2-23"><span class="task-text"><em>24</em>导入 OFP 和 METAR</span></label>
+<label class="task"><input type="checkbox" data-key="2-24"><span class="task-text"><em>25</em>按计算结果填写 MCDU 起飞性能</span></label>
+<label class="task"><input type="checkbox" data-key="2-25"><span class="task-text"><em>26</em>完成 MCDU 设置</span></label>
+<label class="task"><input type="checkbox" data-key="2-26"><span class="task-text"><em>27</em>出现 GPS PRIMARY 提示后按教程按 CLR</span></label>
+</div></details>
+<details class="phase" open><summary><span>04 · FCU 与冷舱完成检查</span><small class="phase-stat">0 / 20</small></summary><div class="tasks">
+<label class="task"><input type="checkbox" data-key="3-0"><span class="task-text"><em>01</em>设置机长修正海压</span></label>
+<label class="task"><input type="checkbox" data-key="3-1"><span class="task-text"><em>02</em>同步副驾驶修正海压</span></label>
+<label class="task"><input type="checkbox" data-key="3-2"><span class="task-text"><em>03</em>设置 ND 显示模式（教程记为 ARD）</span></label>
+<label class="task"><input type="checkbox" data-key="3-3"><span class="task-text"><em>04</em>将 ND 地图范围调至最小</span></label>
+<label class="task"><input type="checkbox" data-key="3-4"><span class="task-text"><em>05</em>打开 CSTR</span></label>
+<label class="task"><input type="checkbox" data-key="3-5"><span class="task-text"><em>06</em>按教程设置 VOR 按钮并同步副驾驶侧</span></label>
+<label class="task"><input type="checkbox" data-key="3-6"><span class="task-text"><em>07</em>确认 FCU 管理状态（三横线和一点）</span></label>
+<label class="task"><input type="checkbox" data-key="3-7"><span class="task-text"><em>08</em>如果未管理，打开两侧 FD 并按教程下压旋钮</span></label>
+<label class="task"><input type="checkbox" data-key="3-8"><span class="task-text"><em>09</em>按 EFB 或 ATC 设置巡航高度</span></label>
+<label class="task"><input type="checkbox" data-key="3-9"><span class="task-text"><em>10</em>确认已完成加油</span></label>
+<label class="task"><input type="checkbox" data-key="3-10"><span class="task-text"><em>11</em>打开安全带指示灯</span></label>
+<label class="task"><input type="checkbox" data-key="3-11"><span class="task-text"><em>12</em>开启燃油泵并检查相关白灯</span></label>
+<label class="task"><input type="checkbox" data-key="3-12"><span class="task-text"><em>13</em>在 EFB Ground / Payload 确认配载完成</span></label>
+<label class="task"><input type="checkbox" data-key="3-13"><span class="task-text"><em>14</em>核对 MCDU 和 EFB 配载信息一致</span></label>
+<label class="task"><input type="checkbox" data-key="3-14"><span class="task-text"><em>15</em>检查 ZFWCG</span></label>
+<label class="task"><input type="checkbox" data-key="3-15"><span class="task-text"><em>16</em>点击 EFB ZFWCG 旁的交换按钮</span></label>
+<label class="task"><input type="checkbox" data-key="3-16"><span class="task-text"><em>17</em>查看起飞重心和配平值</span></label>
+<label class="task"><input type="checkbox" data-key="3-17"><span class="task-text"><em>18</em>返回 MCDU PERF 页面</span></label>
+<label class="task"><input type="checkbox" data-key="3-18"><span class="task-text"><em>19</em>填写 /DN 配平数字</span></label>
+<label class="task"><input type="checkbox" data-key="3-19"><span class="task-text"><em>20</em>确认冷舱启动阶段完成</span></label>
+</div></details>
+<details class="phase" open><summary><span>05 · 后推及发动机启动</span><small class="phase-stat">0 / 14</small></summary><div class="tasks">
+<label class="task"><input type="checkbox" data-key="4-0"><span class="task-text"><em>01</em>申请后推</span></label>
+<label class="task"><input type="checkbox" data-key="4-1"><span class="task-text"><em>02</em>断开顶板外部电源</span></label>
+<label class="task"><input type="checkbox" data-key="4-2"><span class="task-text"><em>03</em>将 TCAS 模式改为 AUTO（按原教程）</span></label>
+<label class="task"><input type="checkbox" data-key="4-3"><span class="task-text"><em>04</em>打开 BEACON 防撞灯</span></label>
+<label class="task"><input type="checkbox" data-key="4-4"><span class="task-text"><em>05</em>松开停留刹车，开始后推</span></label>
+<label class="task"><input type="checkbox" data-key="4-5"><span class="task-text"><em>06</em>推出红线后将发动机模式置于 IGN/START</span></label>
+<label class="task"><input type="checkbox" data-key="4-6"><span class="task-text"><em>07</em>提起一发发动机手柄</span></label>
+<label class="task"><input type="checkbox" data-key="4-7"><span class="task-text"><em>08</em>观察发动机参数是否正常上升</span></label>
+<label class="task"><input type="checkbox" data-key="4-8"><span class="task-text"><em>09</em>若无正常上升，检查 APU BLEED</span></label>
+<label class="task"><input type="checkbox" data-key="4-9"><span class="task-text"><em>10</em>按教程确认可用状态后启动二发</span></label>
+<label class="task"><input type="checkbox" data-key="4-10"><span class="task-text"><em>11</em>后推结束后设置停留刹车</span></label>
+<label class="task"><input type="checkbox" data-key="4-11"><span class="task-text"><em>12</em>等待发动机启动完成</span></label>
+<label class="task"><input type="checkbox" data-key="4-12"><span class="task-text"><em>13</em>将发动机模式选择器返回 NORM</span></label>
+<label class="task"><input type="checkbox" data-key="4-13"><span class="task-text"><em>14</em>确认发动机启动完成</span></label>
+</div></details>
+<details class="phase" open><summary><span>06 · 滑行前与滑行</span><small class="phase-stat">0 / 17</small></summary><div class="tasks">
+<label class="task"><input type="checkbox" data-key="5-0"><span class="task-text"><em>01</em>关闭 APU BLEED</span></label>
+<label class="task"><input type="checkbox" data-key="5-1"><span class="task-text"><em>02</em>关闭 APU MASTER SW</span></label>
+<label class="task"><input type="checkbox" data-key="5-2"><span class="task-text"><em>03</em>将扰流板预位</span></label>
+<label class="task"><input type="checkbox" data-key="5-3"><span class="task-text"><em>04</em>点击教程所述扰流板右下角 RESET</span></label>
+<label class="task"><input type="checkbox" data-key="5-4"><span class="task-text"><em>05</em>按照起飞性能计算结果设置襟翼</span></label>
+<label class="task"><input type="checkbox" data-key="5-5"><span class="task-text"><em>06</em>检查配平数值</span></label>
+<label class="task"><input type="checkbox" data-key="5-6"><span class="task-text"><em>07</em>移动侧杆进入操纵检查页面</span></label>
+<label class="task"><input type="checkbox" data-key="5-7"><span class="task-text"><em>08</em>侧杆全上</span></label>
+<label class="task"><input type="checkbox" data-key="5-8"><span class="task-text"><em>09</em>侧杆全下</span></label>
+<label class="task"><input type="checkbox" data-key="5-9"><span class="task-text"><em>10</em>侧杆全左</span></label>
+<label class="task"><input type="checkbox" data-key="5-10"><span class="task-text"><em>11</em>侧杆全右</span></label>
+<label class="task"><input type="checkbox" data-key="5-11"><span class="task-text"><em>12</em>方向舵全左</span></label>
+<label class="task"><input type="checkbox" data-key="5-12"><span class="task-text"><em>13</em>方向舵全右</span></label>
+<label class="task"><input type="checkbox" data-key="5-13"><span class="task-text"><em>14</em>确认操纵检查完成</span></label>
+<label class="task"><input type="checkbox" data-key="5-14"><span class="task-text"><em>15</em>将滑行灯设为 TAXI</span></label>
+<label class="task"><input type="checkbox" data-key="5-15"><span class="task-text"><em>16</em>打开跑道脱离灯</span></label>
+<label class="task"><input type="checkbox" data-key="5-16"><span class="task-text"><em>17</em>松开停留刹车，开始滑行</span></label>
+</div></details>
+<details class="phase" open><summary><span>07 · 滑行途中与进跑道前</span><small class="phase-stat">0 / 10</small></summary><div class="tasks">
+<label class="task"><input type="checkbox" data-key="6-0"><span class="task-text"><em>01</em>在大直道按教程将自动刹车设为 MAX</span></label>
+<label class="task"><input type="checkbox" data-key="6-1"><span class="task-text"><em>02</em>打开天气雷达</span></label>
+<label class="task"><input type="checkbox" data-key="6-2"><span class="task-text"><em>03</em>打开风切变预警</span></label>
+<label class="task"><input type="checkbox" data-key="6-3"><span class="task-text"><em>04</em>点击下 ECAM 的 T.O.CONFIG</span></label>
+<label class="task"><input type="checkbox" data-key="6-4"><span class="task-text"><em>05</em>操作顶板客舱呼叫 FND 按钮（原文如此）</span></label>
+<label class="task"><input type="checkbox" data-key="6-5"><span class="task-text"><em>06</em>进入跑道前打开着陆灯</span></label>
+<label class="task"><input type="checkbox" data-key="6-6"><span class="task-text"><em>07</em>将滑行灯设为 T.O</span></label>
+<label class="task"><input type="checkbox" data-key="6-7"><span class="task-text"><em>08</em>将频闪灯 STROBE 设为 ON</span></label>
+<label class="task"><input type="checkbox" data-key="6-8"><span class="task-text"><em>09</em>将 TCAS 设为 TA/RA</span></label>
+<label class="task"><input type="checkbox" data-key="6-9"><span class="task-text"><em>10</em>如果使用关空调起飞性能，关闭两侧对应空调按钮</span></label>
+</div></details>
+<details class="phase" open><summary><span>08 · 起飞滑跑与离地</span><small class="phase-stat">0 / 12</small></summary><div class="tasks">
+<label class="task"><input type="checkbox" data-key="7-0"><span class="task-text"><em>01</em>将 N1 设置到约 50%</span></label>
+<label class="task"><input type="checkbox" data-key="7-1"><span class="task-text"><em>02</em>将油门杆推到 FLEX/MCT</span></label>
+<label class="task"><input type="checkbox" data-key="7-2"><span class="task-text"><em>03</em>按照原教程，起飞滑跑初期侧杆向后保持约一半行程</span></label>
+<label class="task"><input type="checkbox" data-key="7-3"><span class="task-text"><em>04</em>80 节时逐渐回中侧杆</span></label>
+<label class="task"><input type="checkbox" data-key="7-4"><span class="task-text"><em>05</em>100 节时按教程完全回中侧杆</span></label>
+<label class="task"><input type="checkbox" data-key="7-5"><span class="task-text"><em>06</em>到蓝圈标注的抬轮速度时开始抬轮</span></label>
+<label class="task"><input type="checkbox" data-key="7-6"><span class="task-text"><em>07</em>按教程将仰角带到约 15°</span></label>
+<label class="task"><input type="checkbox" data-key="7-7"><span class="task-text"><em>08</em>超过 100 英尺后按教程接通 AP1</span></label>
+<label class="task"><input type="checkbox" data-key="7-8"><span class="task-text"><em>09</em>将油门杆推至 CL</span></label>
+<label class="task"><input type="checkbox" data-key="7-9"><span class="task-text"><em>10</em>确认自动推力工作</span></label>
+<label class="task"><input type="checkbox" data-key="7-10"><span class="task-text"><em>11</em>若起飞时关闭空调，重新开启空调 1 和 2</span></label>
+<label class="task"><input type="checkbox" data-key="7-11"><span class="task-text"><em>12</em>按教程要求两个空调按钮相隔约 10 秒开启</span></label>
+</div></details>
+<details class="phase" open><summary><span>09 · 初始爬升</span><small class="phase-stat">0 / 8</small></summary><div class="tasks">
+<label class="task"><input type="checkbox" data-key="8-0"><span class="task-text"><em>01</em>超过 S 速度后收襟翼</span></label>
+<label class="task"><input type="checkbox" data-key="8-1"><span class="task-text"><em>02</em>解除扰流板预位</span></label>
+<label class="task"><input type="checkbox" data-key="8-2"><span class="task-text"><em>03</em>关闭跑道脱离灯</span></label>
+<label class="task"><input type="checkbox" data-key="8-3"><span class="task-text"><em>04</em>QNH 开始闪烁时按教程重新设置修正气压</span></label>
+<label class="task"><input type="checkbox" data-key="8-4"><span class="task-text"><em>05</em>同步机长和副驾驶修正气压</span></label>
+<label class="task"><input type="checkbox" data-key="8-5"><span class="task-text"><em>06</em>同步调整小窗口气压</span></label>
+<label class="task"><input type="checkbox" data-key="8-6"><span class="task-text"><em>07</em>爬升至 10,000 英尺以上关闭着陆灯</span></label>
+<label class="task"><input type="checkbox" data-key="8-7"><span class="task-text"><em>08</em>迎角小于 7.5° 且无颠簸时，可按教程考虑关闭安全带指示灯</span></label>
+</div></details>
+<details class="phase" open><summary><span>10 · 下降前准备（距 TOD 80 海里）</span><small class="phase-stat">0 / 12</small></summary><div class="tasks">
+<label class="task"><input type="checkbox" data-key="9-0"><span class="task-text"><em>01</em>距离下降顶点（白色下降箭头）80海里时 开始做下降准备</span></label>
+<label class="task"><input type="checkbox" data-key="9-1"><span class="task-text"><em>02</em>看向小平板 降落机场天气的气压 在气压选择旋钮预调 调整好后再拔出按钮 复位 三个地方都要设置</span></label>
+<label class="task"><input type="checkbox" data-key="9-2"><span class="task-text"><em>03</em>MCDU 进入 F-PLAN 看降落机场 检查降落跑道和程序</span></label>
+<label class="task"><input type="checkbox" data-key="9-3"><span class="task-text"><em>04</em>进入PERF页 点击NEXT PHASE 直到着陆页面</span></label>
+<label class="task"><input type="checkbox" data-key="9-4"><span class="task-text"><em>05</em>填写降落机场的天气信息 从上到下修正气压 气温 风速</span></label>
+<label class="task"><input type="checkbox" data-key="9-5"><span class="task-text"><em>06</em>查看降落机场对应跑道的航图 找到TRANS ALT 并填写</span></label>
+<label class="task"><input type="checkbox" data-key="9-6"><span class="task-text"><em>07</em>查看航图 接着填写右上角的决断高度 BARO</span></label>
+<label class="task"><input type="checkbox" data-key="9-7"><span class="task-text"><em>08</em>计算我们需要哪个挡位的自动刹车 看平板计算工具-着陆 选择机场和跑道 分别导入两次sim brief的OFD和MATAR数据</span></label>
+<label class="task"><input type="checkbox" data-key="9-8"><span class="task-text"><em>09</em>平板右侧进近速度要看MCDU PERF页面的VAPP数值 并填写</span></label>
+<label class="task"><input type="checkbox" data-key="9-9"><span class="task-text"><em>10</em>平板其他内容检查并填写</span></label>
+<label class="task"><input type="checkbox" data-key="9-10"><span class="task-text"><em>11</em>计算完毕后 选择自动刹车程度</span></label>
+<label class="task"><input type="checkbox" data-key="9-11"><span class="task-text"><em>12</em>看航图 下降高度设置到自动驾驶中 等到下降顶点的时候再按确认高度</span></label>
+</div></details>
+<details class="phase" open><summary><span>11 · 下降与 10,000 英尺以下</span><small class="phase-stat">0 / 5</small></summary><div class="tasks">
+<label class="task"><input type="checkbox" data-key="10-0"><span class="task-text"><em>01</em>下降到15000英尺前要打开安全带指示灯</span></label>
+<label class="task"><input type="checkbox" data-key="10-1"><span class="task-text"><em>02</em>下降到10000英尺开启着陆灯</span></label>
+<label class="task"><input type="checkbox" data-key="10-2"><span class="task-text"><em>03</em>MCP的两个LS按钮打开（ILS进近）</span></label>
+<label class="task"><input type="checkbox" data-key="10-3"><span class="task-text"><em>04</em>看到PFD的STD闪烁 调整修正海压</span></label>
+<label class="task"><input type="checkbox" data-key="10-4"><span class="task-text"><em>05</em>飞机转向成功 截获下滑道 接通APPR 并且开启AP2</span></label>
+</div></details>
+<details class="phase" open><summary><span>12 · 进近及着陆构型</span><small class="phase-stat">0 / 10</small></summary><div class="tasks">
+<label class="task"><input type="checkbox" data-key="11-0"><span class="task-text"><em>01</em>下降到 3500 英尺左右，检查速度、绿点速度</span></label>
+<label class="task"><input type="checkbox" data-key="11-1"><span class="task-text"><em>02</em>如果没有 检查MCDU上是否在进近页面 如果没有 点击下角的active approach</span></label>
+<label class="task"><input type="checkbox" data-key="11-2"><span class="task-text"><em>03</em>3000英尺放襟翼1</span></label>
+<label class="task"><input type="checkbox" data-key="11-3"><span class="task-text"><em>04</em>2000英尺襟翼2</span></label>
+<label class="task"><input type="checkbox" data-key="11-4"><span class="task-text"><em>05</em>襟翼2放好后放起落架</span></label>
+<label class="task"><input type="checkbox" data-key="11-5"><span class="task-text"><em>06</em>起落架放好后放襟翼3并且扰流板预位</span></label>
+<label class="task"><input type="checkbox" data-key="11-6"><span class="task-text"><em>07</em>跑道脱离灯开 滑行灯T.O.</span></label>
+<label class="task"><input type="checkbox" data-key="11-7"><span class="task-text"><em>08</em>襟翼3放好后 放襟翼4</span></label>
+<label class="task"><input type="checkbox" data-key="11-8"><span class="task-text"><em>09</em>客舱打铃</span></label>
+<label class="task"><input type="checkbox" data-key="11-9"><span class="task-text"><em>10</em>最后着陆前断自动驾驶</span></label>
+</div></details>
+<details class="phase" open><summary><span>13 · 着陆与脱离跑道</span><small class="phase-stat">0 / 2</small></summary><div class="tasks">
+<label class="task"><input type="checkbox" data-key="12-0"><span class="task-text"><em>01</em>完成着陆</span></label>
+<label class="task"><input type="checkbox" data-key="12-1"><span class="task-text"><em>02</em>人工刹车即可解除自动刹车</span></label>
+</div></details>
+<details class="phase" open><summary><span>14 · 落地滑行</span><small class="phase-stat">0 / 6</small></summary><div class="tasks">
+<label class="task"><input type="checkbox" data-key="13-0"><span class="task-text"><em>01</em>开始滑行</span></label>
+<label class="task"><input type="checkbox" data-key="13-1"><span class="task-text"><em>02</em>襟翼收回 扰流板解除预位</span></label>
+<label class="task"><input type="checkbox" data-key="13-2"><span class="task-text"><em>03</em>TCAS打回STBY位 天气雷达都关闭</span></label>
+<label class="task"><input type="checkbox" data-key="13-3"><span class="task-text"><em>04</em>MCP把LS都关闭</span></label>
+<label class="task"><input type="checkbox" data-key="13-4"><span class="task-text"><em>05</em>着陆灯关闭 滑行灯TAXI 频闪灯AUTO 启动APU</span></label>
+<label class="task"><input type="checkbox" data-key="13-5"><span class="task-text"><em>06</em>进机位前关闭滑行灯</span></label>
+</div></details>
+<details class="phase" open><summary><span>15 · 进机位与下客</span><small class="phase-stat">0 / 7</small></summary><div class="tasks">
+<label class="task"><input type="checkbox" data-key="14-0"><span class="task-text"><em>01</em>接通APU引气</span></label>
+<label class="task"><input type="checkbox" data-key="14-1"><span class="task-text"><em>02</em>关闭引擎</span></label>
+<label class="task"><input type="checkbox" data-key="14-2"><span class="task-text"><em>03</em>平板里呼叫地面服务（地面电源 廊桥等）</span></label>
+<label class="task"><input type="checkbox" data-key="14-3"><span class="task-text"><em>04</em>引擎N2转速小于20% 关闭防撞灯</span></label>
+<label class="task"><input type="checkbox" data-key="14-4"><span class="task-text"><em>05</em>接通地面电源</span></label>
+<label class="task"><input type="checkbox" data-key="14-5"><span class="task-text"><em>06</em>关闭安全带指示灯</span></label>
+<label class="task"><input type="checkbox" data-key="14-6"><span class="task-text"><em>07</em>平板Payload页面下客</span></label>
+</div></details>
+<details class="phase" open><summary><span>16 · 停机与关闭电源</span><small class="phase-stat">0 / 5</small></summary><div class="tasks">
+<label class="task"><input type="checkbox" data-key="15-0"><span class="task-text"><em>01</em>关闭油泵</span></label>
+<label class="task"><input type="checkbox" data-key="15-1"><span class="task-text"><em>02</em>TCAS改为STBY位置</span></label>
+<label class="task"><input type="checkbox" data-key="15-2"><span class="task-text"><em>03</em>冷舱启动程序反着来一遍</span></label>
+<label class="task"><input type="checkbox" data-key="15-3"><span class="task-text"><em>04</em>所有东西都关闭后 关闭APU</span></label>
+<label class="task"><input type="checkbox" data-key="15-4"><span class="task-text"><em>05</em>关闭电瓶 关闭外部电源</span></label>
+</div></details></div><p class="notice">本清单依照你提供的三份 MSFS 模拟飞行教程逐项整理，保留原文件操作顺序；个别步骤可能与 FlyByWire A32NX 标准程序不符，应以机模手册为准。在 Safari 普通模式下访问 GitHub Pages 网站，勾选会自动保存在本机浏览器。换浏览器、清除网站数据或更换设备可能丢失进度；如有需要可额外导出备份。</p></main><script>
+(function(){'use strict';
+var root=document.getElementById('phases');var inputs=Array.prototype.slice.call(root.querySelectorAll('input[type=checkbox]'));var key='a320neo_checklist_v2';var state={};var storageOK=true;var banner=document.querySelector(".autosave-banner");
+try {var stored=localStorage.getItem(key);state=JSON.parse(stored||'{}')||{};var probe="a320_autosave_test";localStorage.setItem(probe,"1");if(localStorage.getItem(probe)!=="1")throw Error("storage blocked");localStorage.removeItem(probe);}catch(e){storageOK=false;banner.classList.add("error");}
+function update(){var n=0;inputs.forEach(function(c){if(c.checked)n++;});document.getElementById('count').textContent=n+' / '+inputs.length;document.getElementById('fill').style.width=(100*n/inputs.length)+'%';Array.prototype.forEach.call(root.querySelectorAll('.phase'),function(section){var c=Array.prototype.slice.call(section.querySelectorAll('input[type=checkbox]'));section.querySelector('.phase-stat').textContent=c.filter(function(x){return x.checked;}).length+' / '+c.length;});}
+function save(){try{localStorage.setItem(key,JSON.stringify(state));if(localStorage.getItem(key)!==JSON.stringify(state))throw Error("storage mismatch");storageOK=true;banner.classList.remove("error");banner.querySelector("strong").textContent="✓ 自动保存正常";document.getElementById('storage-status').textContent='✓ 本机浏览器已保存勾选状态';document.getElementById('save-time').textContent='最后保存：'+new Date().toLocaleString('zh-CN');}catch(e){storageOK=false;banner.classList.add("error");banner.querySelector("strong").textContent="⚠ 自动保存失败";document.getElementById('save-time').textContent='浏览器禁止保存；请检查无痕模式或网站权限。';document.getElementById('storage-status').textContent='⚠ 未能保存进度，请使用备用备份按钮。';}update();}
+inputs.forEach(function(c){if(state[c.getAttribute('data-key')])c.checked=true;c.addEventListener('change',function(){state[c.getAttribute('data-key')]=c.checked;save();});});update();
+if(storageOK){banner.querySelector('strong').textContent='✓ 自动保存正常';document.getElementById('save-time').textContent=Object.keys(state).length?'已恢复上次勾选记录 · 以后无需手动保存':'保存功能已就绪 · 勾选一项试试';document.getElementById('storage-status').textContent='✓ 自动保存已启用（只保存在当前设备及浏览器）';}else{banner.querySelector('strong').textContent='⚠ 自动保存不可用';document.getElementById('save-time').textContent='请用 Safari 普通标签页打开网站';}
+document.getElementById('expand').onclick=function(){Array.prototype.forEach.call(root.querySelectorAll('details'),function(d){d.open=true;});};
+document.getElementById('collapse').onclick=function(){Array.prototype.forEach.call(root.querySelectorAll('details'),function(d){d.open=false;});};
+document.getElementById('search').addEventListener('input',function(){var q=this.value.trim().toLowerCase();Array.prototype.forEach.call(root.querySelectorAll('.phase'),function(d){var found=false;Array.prototype.forEach.call(d.querySelectorAll('.task'),function(label){var show=label.textContent.toLowerCase().indexOf(q)!==-1;label.classList.toggle('hidden',!show);if(show)found=true;});d.classList.toggle('hidden',!found);if(q&&found)d.open=true;});});
+document.getElementById('reset').onclick=function(){if(confirm('确定清空全部勾选记录吗？')){state={};inputs.forEach(function(x){x.checked=false;});save();}};
+document.getElementById('backup').onclick=function(){var b=new Blob([JSON.stringify({version:2,marked:state},null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='A320neo_勾选进度_'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();};
+document.getElementById('restore').onclick=function(){document.getElementById('backup-file').click();};
+
+
+document.getElementById('backup-file').onchange=function(e){var file=e.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(){try{var data=JSON.parse(reader.result);if(!data.marked||typeof data.marked!=='object'||Array.isArray(data.marked))throw Error('invalid');state=data.marked;inputs.forEach(function(x){x.checked=!!state[x.getAttribute('data-key')];});save();alert('进度恢复成功');}catch(err){alert('备份文件无法读取');}};reader.readAsText(file);};
+})();</script></body></html>
